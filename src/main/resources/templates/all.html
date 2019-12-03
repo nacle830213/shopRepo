@@ -31,8 +31,12 @@
     <script>
     function updata(type,id,a) {
         var flag = true;
+        var price=-1;
         str  = type ==0 ? "出货数量" : "补货数量"
         amount = prompt(str,"")
+        if (str=="出货数量"){
+            price = prompt("出货价格","")
+        }
         alert(type+":"+id+":"+amount)
         if (amount!=null){
             amount = parseInt(amount)
@@ -44,7 +48,7 @@
             if (flag){
                 var xmlhttp = new XMLHttpRequest();
                 // get方法带参数是将参数写在url里面传过去给后端
-                xmlhttp.open("GET", "/update?id="+id+"&amount="+amount+"&type="+type, true);
+                xmlhttp.open("GET", "/update?id="+id+"&amount="+amount+"&type="+type+"&price="+price, true);
                 xmlhttp.send();
                 xmlhttp.onreadystatechange = function(){
                     if(xmlhttp.readyState == 4 && xmlhttp.status == 200){

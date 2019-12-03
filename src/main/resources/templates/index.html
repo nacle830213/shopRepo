@@ -33,16 +33,16 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="/index" th:text="${account}"> </a></li>
-            <li><a href="/oldall" target="window">查询</a></li>
-            <li><a href="#">进货</a></li>
-            <li><a href="#">记录</a></li>
+            <li><a href="/oldall" target="window" >查询</a></li>
+            <li><a href="/add" target="window" >进货</a></li>
+            <li><a href="/record" target="window" >记录</a></li>
             <li><a href="/build" target="window">初始化仓库</a></li>
           </ul>
 
         </div>
 <!--        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">-->
 <!--          <h1 class="page-header">Dashboard</h1>-->
-          <iframe id="myiframe" src="/default" name="window" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" frameborder="0">
+          <iframe id="myiframe" src="/default" name="window" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" frameborder="0" height="600">
 
           </iframe>
 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<h2 class="sub-header">商品记录</h2>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>时间</th>
+            <th>商品</th>
+            <th>交易类型</th>
+            <th>价格</th>
+            <th>数量</th>
+        </tr>
+        </thead>
+        <tbody th:each="record,i : ${records}">
+        <tr>
+            <td th:text="${record.getTime()}"></td>
+            <td th:text="${record.getGood().getName()}"></td>
+            <td th:text="${record.getType()}"></td>
+            <td th:text="${record.getPrice()}"></td>
+            <td th:text="${record.getAmount()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

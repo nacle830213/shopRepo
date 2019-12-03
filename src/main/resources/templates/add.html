@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-<!--    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
+    <!--    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
     <script src="/js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 <input type="button" id="btn2" value="在末尾增加">
 <input type="button" id="sub" value="提交" onclick="submit()" >
 <div class="table-responsive">
-    <h1 align="center">初始化仓库</h1>
     <input type="hidden" class="input-text"  th:value="${account}"
            name="realName" id="account">
+    <h1 align="center">进货</h1>
     <table class="table table-striped" id="test">
         <thead>
         <tr>
@@ -23,11 +23,6 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="number" name="price"></td>
-            <td><input type="number" name="amount"></td>
-        </tr>
         <tr>
             <td><input type="text" name="name"></td>
             <td><input type="number" name="price"></td>
@@ -44,7 +39,7 @@
         });
 
         function  submit() {
-            c = confirm("初始化仓库会将之前的仓库记录全部清空确认清空嘛？")
+            c = confirm("是否确认进货？")
             if(c==true){
                 var trList = $("#test tbody").children("tr")
                 var  list = []
@@ -59,7 +54,7 @@
                 account = $("#account").val()
                 //post请求
                 var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("POST", "/build?account="+account, true);
+                xmlhttp.open("POST", "/add?account="+account, true);
                 xmlhttp.setRequestHeader("Content-Type","application/json;charsetset=UTF-8"); // 可以定义请求头带给后端
                 xmlhttp.send(JSON.stringify(list));  // 要发送的参数，要转化为json字符串发送给后端，后端就会接受到json对象
                 // readyState == 4 为请求完成，status == 200为请求陈宫返回的状态

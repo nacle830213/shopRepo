@@ -1,8 +1,6 @@
 package com.yad.sjjg.repo.controller;
 
-import com.yad.sjjg.repo.model.Goods;
-import com.yad.sjjg.repo.model.GoodsDto;
-import com.yad.sjjg.repo.model.LinkList;
+import com.yad.sjjg.repo.model.*;
 import com.yad.sjjg.repo.service.AllService;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpSession;
@@ -19,12 +17,12 @@ public class indexController {
     @Autowired
     private AllService allService;
 
-    @PostMapping("/add")
-    public  String  addgoods(@RequestBody List<GoodsDto> list){
-        for(GoodsDto goodsDto : list){
-            System.out.println(goodsDto);
-        }
-        return  "succsee";
+    @GetMapping("/add")
+    public  String  addgoods(Model model,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        model.addAttribute("account",user);
+        return  "add";
     }
 
     @GetMapping("/build")
@@ -50,5 +48,15 @@ public class indexController {
         }
         return  "login";
     }
-
+    @GetMapping("/record")
+    public  String getRecord(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        if (user!=null){
+            List<RecordDao> list = allService.getRecords(user);
+            model.addAttribute("records",list);
+            return  "record";
+        }
+        return  "login";
+    }
 }

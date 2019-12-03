@@ -13,4 +13,7 @@ public interface UserMapper {
 
     @Insert("insert into goods  (account,password) VALUES (#{account},#{password})")
     int create(String account, String password);
+
+    @Select("select * from user where id = #{userid}")
+    User findById(Integer userid);
 }

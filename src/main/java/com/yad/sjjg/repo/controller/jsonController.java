@@ -27,18 +27,31 @@ public class jsonController {
         }
         return  "login";
     }
+    @PostMapping("/add")
+    public  String add (@RequestBody List<GoodsDto> list,
+                          HttpServletRequest request,
+                          @RequestParam String account){
+        System.out.println("build");
+        if (account!=null){
+            allService.add(list,account);
+            System.out.println(account);
+            return  "add";
+        }
+        return  "login";
+    }
     @GetMapping("/update")
     public String update(@RequestParam Integer id,@RequestParam Integer amount ,
-                         @RequestParam Integer type,HttpServletRequest request){
+                         @RequestParam Integer type,@RequestParam Double price,
+                         HttpServletRequest request){
         HttpSession session=request.getSession();
         String account = (String)session.getAttribute("user");
         System.out.println(account+":"+id+":"+amount+"type:"+type);
         if (type==0){
-            allService.update(account,id,amount,type);
+            allService.update(account,id,amount,type,price);
             return "output";
         }
         if (type==1){
-            allService.update(account,id,amount,type);
+            allService.update(account,id,amount,type,price);
             return  "input";
         }
         return  "except";
