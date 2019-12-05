@@ -24,11 +24,17 @@ public class AllService {
         private RecordMapper recordMapper;
         public LinkList build(List<GoodsDto> list, String account){
             LinkList link  = new LinkList();
-            List<Urepo> urepos=urepoMapper.getUserGoods(account);
+//            List<Urepo> urepos=urepoMapper.getUserGoods(account);
             User user = userMapper.findByaccount(account);
-            for (Urepo urepo :urepos){
-                goodsMapper.deletegood(urepo.getGood());
-            }
+//            for (Urepo urepo :urepos){
+////                goodsMapper.deletegood(urepo.getGood());
+////            }
+            Record record1 = new Record();
+            record1.setTime(new Date());
+            record1.setPrice(0.0);
+            record1.setAmount(0);
+            record1.setType(3);
+            record1.setUserid(user.getId());
             urepoMapper.clearUsergoods(account);
             int i=0;//0
             for (GoodsDto goodsDto:list){
@@ -92,7 +98,7 @@ public class AllService {
                 if (a>0)
                     goodsMapper.output(id,a,time);
                 else{
-                    goodsMapper.deletegood(id);
+//                    goodsMapper.deletegood(id);
                     urepoMapper.delet(id);
                 }
                 Record record = new Record();
@@ -115,7 +121,7 @@ public class AllService {
         User user1 = userMapper.findByaccount(user);
         List<Record> records = recordMapper.userRecords(user1.getId());
         List<RecordDao> recordDaoList = new LinkedList<>();
-        String [] Types = {"出货","补货","进货"};
+        String [] Types = {"出货","补货","进货","初始化清空仓库"};
         for (Record record :records){
             Goods goods = goodsMapper.findById(record.getGood());
             RecordDao recordDao = new RecordDao();

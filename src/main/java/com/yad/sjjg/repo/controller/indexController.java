@@ -54,6 +54,7 @@ public class indexController {
         String user = (String) session.getAttribute("user");
         if (user!=null){
             List<RecordDao> list = allService.getRecords(user);
+
             model.addAttribute("records",list);
             return  "record";
         }

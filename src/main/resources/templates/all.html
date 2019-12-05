@@ -37,9 +37,13 @@
         if (str=="出货数量"){
             price = prompt("出货价格","")
         }
-        alert(type+":"+id+":"+amount)
+        // alert(type+":"+id+":"+amount)
         if (amount!=null){
             amount = parseInt(amount)
+            if (amount<=0){
+                flag==false
+                alert("请输入出货价格")
+            }
             if (type==0 &&(a-amount)<0){
                 flag =false
                 alert("超出目前库存无法出货")
@@ -49,6 +53,7 @@
                 var xmlhttp = new XMLHttpRequest();
                 // get方法带参数是将参数写在url里面传过去给后端
                 xmlhttp.open("GET", "/update?id="+id+"&amount="+amount+"&type="+type+"&price="+price, true);
+                //www.gsyad.cn:8080/update?id=1&ammount=1
                 xmlhttp.send();
                 xmlhttp.onreadystatechange = function(){
                     if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
