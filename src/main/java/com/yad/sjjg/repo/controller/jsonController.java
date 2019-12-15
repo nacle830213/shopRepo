@@ -56,4 +56,15 @@ public class jsonController {
         }
         return  "except";
     }
+    @GetMapping("/transfer")
+    public String transfer(@RequestParam Integer id ,@RequestParam Integer amount,
+                            @RequestParam String account,HttpServletRequest request){
+        HttpSession session=request.getSession();
+        String user = (String)session.getAttribute("user");
+        boolean bool=allService.transfer(user,account,id,amount);
+        if (!bool)
+            return "transfer";
+        else
+            return "except";
+    }
 }

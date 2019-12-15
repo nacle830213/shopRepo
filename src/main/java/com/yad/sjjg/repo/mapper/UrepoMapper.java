@@ -23,4 +23,7 @@ public interface UrepoMapper {
 
     @Delete("delete from urepo where good  = #{id}")
     void delet(Integer id);
+
+    @Delete("delete from urepo where user=#{user} and good  = #{id} ")
+    void deleteuserGood(String user, Integer id);
 }

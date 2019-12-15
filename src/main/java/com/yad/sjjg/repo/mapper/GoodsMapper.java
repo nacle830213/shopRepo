@@ -22,4 +22,5 @@ public interface GoodsMapper {
 
     @Update("update goods set amount = #{i} ,modified_time = #{time} where id = #{id}")
     void output(Integer id, Integer i, Date time);
+
 }

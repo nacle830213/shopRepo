@@ -33,7 +33,13 @@ public class indexController {
         return  "build";
     }
     @GetMapping("/default")
-    public  String defaults(){
+    public  String defaults(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        String user = (String) session.getAttribute("user");
+        if (user!=null){
+            DateDispalyDto dateDispalyDto=allService.Datedisplay(user);
+            model.addAttribute("display",dateDispalyDto);
+        }
         return "default";
     }
     @GetMapping("/oldall")
@@ -54,10 +60,10 @@ public class indexController {
         String user = (String) session.getAttribute("user");
         if (user!=null){
             List<RecordDao> list = allService.getRecords(user);
-
             model.addAttribute("records",list);
             return  "record";
         }
         return  "login";
     }
+
 }

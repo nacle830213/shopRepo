@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <th>商品名</th>
+            <th>入仓时间</th>
             <th>单价</th>
             <th>数量</th>
         </tr>
@@ -20,10 +21,12 @@
         <tbody th:each="good,i : ${list}">
         <tr>
             <td th:text="${good.getName()}"></td>
+            <td th:text="${good.getCreate_time().toLocaleString()}"></td>
             <td th:text="${good.getPrice()}"></td>
             <td th:text="${good.getAmount()}"></td>
             <td><button type="button" class="btn btn-info"  th:onclick="updata(0,[[${good.getId()}]],[[${good.getAmount()}]]);" >出货</button></td>
-            <td><button type="button" class="btn btn-warning" th:onclick="updata(1,[[${good.getId()}]],[[${good.getAmount()}]]);">补货</button></td>
+            <td ><button th:if="${!good.getName().contains(':')}"  type="button" class="btn btn-warning" th:onclick="updata(1,[[${good.getId()}]],[[${good.getAmount()}]]);">补货</button></td>
+            <td><button type="button" class="btn btn-danger" th:onclick="transfer(4,[[${good.getId()}]],[[${good.getAmount()}]]);">转仓</button></td>
             <input type="hidden" th:value="${good.getId()}" >
         </tr>
         </tbody>
@@ -36,13 +39,17 @@
         amount = prompt(str,"")
         if (str=="出货数量"){
             price = prompt("出货价格","")
+            if (price==""){
+                alert("请输入价格")
+                return
+            }
         }
-        // alert(type+":"+id+":"+amount)
+
         if (amount!=null){
             amount = parseInt(amount)
             if (amount<=0){
                 flag==false
-                alert("请输入出货价格")
+                alert("请输入出货数量")
             }
             if (type==0 &&(a-amount)<0){
                 flag =false
@@ -65,6 +72,43 @@
                 }
             }
         }
+    }
+
+    var root = "777"
+    function transfer(type,id,a) {
+        var r = prompt("转仓需要权限密码","")
+        if(r!=root){
+            alert("权限密码错误不可进行转仓")
+            return ;
+        }
+        var repo = prompt("转移到哪个仓库","")
+        var rflag = repo!="" ?  true :false
+        var amount = prompt("转仓数量","")
+        amount = parseInt(amount)
+        var  flag = (a-amount)>=0 ? true : false
+        if(flag && rflag){
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.open("GET", "/transfer?id="+id+"&amount="+amount+"&account="+repo, true);
+            xmlhttp.send();
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                    console.log(xmlhttp.responseText);
+                if (xmlhttp.responseText=="transfer"){
+                    var _body = window.parent;
+                    var _iframe1=_body.document.getElementById('myiframe');
+                    _iframe1.contentWindow.location.reload(true);
+                }else
+                    alert("仓库名不存在请检查")
+                }
+            }
+        }else {
+           if (!flag){
+               alert("转仓数量超出库存不能转移请重新输入")
+           }
+           if (!rflag)
+               alert("仓库名为空不能发起转仓")
+        }
+
     }
     </script>
 </div>

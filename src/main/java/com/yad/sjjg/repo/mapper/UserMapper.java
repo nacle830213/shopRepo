@@ -11,7 +11,7 @@ public interface UserMapper {
     @Select("select * from user where account=#{account}")
     User findByaccount(String account);
 
-    @Insert("insert into goods  (account,password) VALUES (#{account},#{password})")
+    @Insert("insert into user  (account,password) VALUES (#{account},#{password})")
     int create(String account, String password);
 
     @Select("select * from user where id = #{userid}")

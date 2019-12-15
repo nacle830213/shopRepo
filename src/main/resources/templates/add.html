@@ -8,8 +8,8 @@
     <script src="/js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-<input type="button" id="btn2" value="在末尾增加">
-<input type="button" id="sub" value="提交" onclick="submit()" >
+<input type="button"  class="btn btn-info" id="btn2" value="增加一个">
+<input type="button"  class="btn btn-info" id="sub" value="进货" onclick="submit()" >
 <div class="table-responsive">
     <input type="hidden" class="input-text"  th:value="${account}"
            name="realName" id="account">
@@ -24,9 +24,9 @@
         </thead>
         <tbody>
         <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="number" name="price"></td>
-            <td><input type="number" name="amount"></td>
+            <td><input type="text" name="name" class="form-control"></td>
+            <td><input type="number" name="price" class="form-control"></td>
+            <td><input type="number" name="amount" class="form-control"></td>
         </tr>
         </tbody>
     </table>
@@ -34,7 +34,7 @@
         $(function(){
             $("#btn2").click(function() {
                 console.log("asd")
-                $("#test tbody").append('<tr><td><input type="text" name="name"></td><td><input type="number" name="price"></td><td><input type="number" name="amount"></td></tr>');
+                $("#test tbody").append('<tr><td><input type="text" name="name" class="form-control"></td><td><input type="number" name="price" class="form-control"></td><td><input type="number" name="amount" class="form-control"></td></tr>');
             });
         });
 

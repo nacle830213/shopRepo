@@ -3,12 +3,30 @@ package com.yad.sjjg.repo.model;
 import java.util.Date;
 
 public class Record {
+    private  Integer Id ;
     private Date time;
     private  Integer userid;
     private  Integer good;
     private  Integer type;
     private  Integer amount;
     private  Double price;
+    private  String to_from;
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
+    }
+
+    public String getTo_from() {
+        return to_from;
+    }
+
+    public void setTo_from(String to_from) {
+        this.to_from = to_from;
+    }
 
     public Double getPrice() {
         return price;

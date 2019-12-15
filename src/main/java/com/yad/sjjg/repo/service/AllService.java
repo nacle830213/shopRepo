@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
@@ -35,6 +36,8 @@ public class AllService {
             record1.setAmount(0);
             record1.setType(3);
             record1.setUserid(user.getId());
+            record1.setGood(1);
+            recordMapper.insertReccord(record1);
             urepoMapper.clearUsergoods(account);
             int i=0;//0
             for (GoodsDto goodsDto:list){
@@ -53,6 +56,7 @@ public class AllService {
                 record.setTime(new Date());
                 record.setGood(id);
                 record.setAmount(newgoods.getAmount());
+                record.setPrice(goodsDto.getPrice());
                 recordMapper.insertReccord(record);
             }
             userpool.put(account,link);
@@ -121,18 +125,27 @@ public class AllService {
         User user1 = userMapper.findByaccount(user);
         List<Record> records = recordMapper.userRecords(user1.getId());
         List<RecordDao> recordDaoList = new LinkedList<>();
-        String [] Types = {"出货","补货","进货","初始化清空仓库"};
+        String [] Types = {"出货","补货","进货","初始化清空仓库","本仓库转出","本仓库转入"};
         for (Record record :records){
             Goods goods = goodsMapper.findById(record.getGood());
+            System.out.println(goods);
             RecordDao recordDao = new RecordDao();
             recordDao.setAmount(record.getAmount());
             recordDao.setGood(goods);
             recordDao.setTime(record.getTime());
-            recordDao.setType(Types[record.getType()]);
+            String to_from ="";
+            if (record.getType()==4)
+                to_from+="To"+record.getTo_from();
+            if (record.getType()==5)
+                to_from+="From"+record.getTo_from();
+            recordDao.setType(Types[record.getType()]+to_from);
             recordDao.setUser(userMapper.findById(record.getUserid()));
             if (record.getType()==0){
                 recordDao.setPrice(record.getPrice());
-            }else {
+            }else if (record.getType()==3){
+                recordDao.setPrice(record.getPrice());
+            }
+            else{
                 recordDao.setPrice(goods.getPrice());
             }
             recordDaoList.add(recordDao);
@@ -156,7 +169,81 @@ public class AllService {
             record.setTime(new Date());
             record.setGood(id);
             record.setAmount(newgoods.getAmount());
+            record.setPrice(newgoods.getPrice());
             recordMapper.insertReccord(record);
         }
+    }
+
+    public boolean transfer(String user, String account, Integer id, Integer amount) {
+            User user1 = userMapper.findByaccount(account);
+            User user2 = userMapper.findByaccount(user);
+            if (user1!=null){
+                Goods goods = goodsMapper.findById(id);
+                System.out.println(goods.getAmount()+"***"+amount);
+                goods.setName(user+":"+goods.getName());
+                System.out.println(goods.getAmount());
+                int ids;
+                if (goods.getAmount()<=0){
+                    urepoMapper.deleteuserGood(user,id);//删除 已经时总量的转仓
+                    goods.setAmount(amount);  //设置数量
+                    goodsMapper.create(goods);
+                    ids = goodsMapper.getId();
+                    urepoMapper.create(account,ids);
+
+                    System.out.println(ids+"**"+goods.getId());
+                }else{
+                    goodsMapper.output(id,goods.getAmount()-amount,new Date());
+                    goods.setAmount(amount);
+                    goodsMapper.create(goods);
+                    ids = goodsMapper.getId();
+                    urepoMapper.create(account,ids);
+                    System.out.println(ids+"**"+goods.getId());
+                }
+                Record record = util.createRecord(user2.getId(),goods.getId(),4,amount,goods.getPrice());
+                record.setTo_from(account);
+                recordMapper.insertReccord(record);
+                Record record1 = util.createRecord(user1.getId(),ids,5,goods.getAmount(),goods.getPrice());
+                record1.setTo_from(user);
+                recordMapper.insertReccord(record1);
+                return  false;
+            }else {
+                return  true;
+            }
+    }
+
+    public DateDispalyDto Datedisplay(String user) {
+            User user1 = userMapper.findByaccount(user);
+            DateDispalyDto temp = new DateDispalyDto() ;
+            if (user1!=null){
+                Date now = new Date();
+                String date = now.toLocaleString();
+                String [] s = date.split(" ");
+                String  start = s[0]+" 00:00:00";
+                String  end = date;
+                List<Record> records = recordMapper.UserDateRecords(user1.getId(),start,end);
+                DecimalFormat df = new DecimalFormat(".00");
+                for (Record record :records){
+                    Goods goods = goodsMapper.findById(record.getGood());
+                    if (record.getType()==0){//出货时，把出货价格减去进货价格
+                        Double profile=record.getAmount()*(record.getPrice()-goods.getPrice());
+                        profile = Double.parseDouble(df.format(profile));
+                        temp.setProfile(temp.getProfile()+profile);
+                        temp.setOutput(temp.getOutput()+record.getAmount());
+                    }
+                    if (record.getType()==1 || record.getType()==2){//进货或者补货时
+                        Double cost = record.getPrice()*record.getAmount();
+                        cost = Double.parseDouble(df.format(cost));
+                        temp.setCost(temp.getCost()+cost);
+                        temp.setInput(temp.getInput()+record.getAmount());
+                    }
+                    if (record.getType()==4){
+                        Double value = record.getPrice()*record.getAmount();
+                        value = Double.parseDouble(df.format(value));
+                        temp.setValue(temp.getValue()+value);
+                        temp.setChangeNum(temp.getChangeNum()+record.getAmount());
+                    }
+                }
+            }
+            return temp;
     }
 }

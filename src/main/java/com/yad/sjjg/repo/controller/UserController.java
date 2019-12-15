@@ -53,7 +53,7 @@ public class UserController {
         }
         return  "login";
     }
-    @PostMapping("/signup")
+    @GetMapping("/signup")
     public  String signup(@RequestParam String account, @RequestParam String password,
                           HttpServletRequest request, Model model){
         User user=allService.signup(account,password);

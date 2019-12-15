@@ -8,8 +8,8 @@
     <script src="/js/jquery-3.4.1.min.js"></script>
 </head>
 <body>
-<input type="button" id="btn2" value="在末尾增加">
-<input type="button" id="sub" value="提交" onclick="submit()" >
+<input type="button" class="btn btn-warning"  id="btn2" value="增加一个">
+<input type="button" id="sub" class="btn btn-warning"  value="初始化仓库" onclick="submit()" >
 <div class="table-responsive">
     <h1 align="center">初始化仓库</h1>
     <input type="hidden" class="input-text"  th:value="${account}"
@@ -24,26 +24,31 @@
         </thead>
         <tbody>
         <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="number" name="price"></td>
-            <td><input type="number" name="amount"></td>
+            <td><input type="text" name="name" class="form-control"></td>
+            <td><input type="number" name="price" class="form-control"></td>
+            <td><input type="number" name="amount" class="form-control"></td>
         </tr>
-        <tr>
-            <td><input type="text" name="name"></td>
-            <td><input type="number" name="price"></td>
-            <td><input type="number" name="amount"></td>
-        </tr>
+<!--        <tr>-->
+<!--            <td><input type="text" name="name"></td>-->
+<!--            <td><input type="number" name="price"></td>-->
+<!--            <td><input type="number" name="amount"></td>-->
+<!--        </tr>-->
         </tbody>
     </table>
     <script>
         $(function(){
             $("#btn2").click(function() {
                 console.log("asd")
-                $("#test tbody").append('<tr><td><input type="text" name="name"></td><td><input type="number" name="price"></td><td><input type="number" name="amount"></td></tr>');
+                $("#test tbody").append('<tr><td><input type="text" name="name" class="form-control"></td><td><input type="number" name="price" class="form-control"></td><td><input type="number" name="amount" class="form-control"></td></tr>');
             });
         });
-
+        var root = "777"
         function  submit() {
+            var r = prompt("初始化仓库需要权限密码","")
+            if(r!=root){
+                alert("权限密码错误不可进行初始化仓库")
+                return ;
+            }
             c = confirm("初始化仓库会将之前的仓库记录全部清空确认清空嘛？")
             if(c==true){
                 var trList = $("#test tbody").children("tr")

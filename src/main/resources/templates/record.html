@@ -20,7 +20,7 @@
         </thead>
         <tbody th:each="record,i : ${records}">
         <tr>
-            <td th:text="${record.getTime()}"></td>
+            <td th:text="${record.getTime().toLocaleString()}"></td>
             <td th:text="${record.getGood().getName()}"></td>
             <td th:text="${record.getType()}"></td>
             <td th:text="${record.getPrice()}"></td>
